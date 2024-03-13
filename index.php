@@ -1,6 +1,6 @@
 <?php
 
-function cleanString($text) {
+function cleanString(string $text) {
     $utf8 = array(
         '/[áàâãªä]/u'   =>   'a',
         '/[ÁÀÂÃÄ]/u'    =>   'A',
@@ -44,24 +44,39 @@ $outputMCIF460[0] = str_pad($outputMCIF460[0], 150);
 
 //echo $outputMCIF460[0] . PHP_EOL;
 
+if(strtolower($argv[1]) === 'pj') {
+    $tipoPessoa = '3';
+    $tipoCGC = '3';
+    $paternCGC = '/(\/|\-|\.)/';
+} else {
+    $tipoPessoa = '1';
+    $tipoCGC = '1';
+    $paternCGC = '/(\/|\-|\.)/';
+}
+
 try {
     $handle = fopen('pessoas.csv', 'r');
 
     for($i = -1; ($data = fgetcsv($handle, separator: ';')) !== false; $i++) {
         if($i > 0) {
-            $cnpj = preg_replace('/(\/|\-|\.)/', '', $data[1]);
+            $cnpj = preg_replace($paternCGC, '', $data[1]);
             $createDt = preg_replace('/(\/|\-)/', '', $data[4]);
             $nome = str_pad(substr(cleanString($data[2]), 0, 60), 60);
             $nomeCurto = str_pad(substr(cleanString($data[3]), 0, 25), 25);
-            $agencia = $data[10];
+            $agencia = str_pad($data[10], 4, '0', STR_PAD_LEFT);
             $agenciaDv = $data[11];
+
+//            echo str_pad($i, 3, '0', STR_PAD_LEFT) . '=>' . $data[2] . PHP_EOL;
+//            $nome = '';
+
+//            continue;
 
             $outputMCIF460[$i] =
                 str_pad($i, 5, '0', STR_PAD_LEFT)       // 01 - sequencial do cliente (ter certeza do que pode ser)
                 . '01'                                                          // 02 - tipo do detalhe [01]
-                . '3'                                                           // 03 - tipo de pessoa [1|2|3|4|5]
-                . '3'                                                           // 04 - tipo de CPF/CNPJ
-                . $cnpj                                                         // 05 - CPF/CNPJ
+                . $tipoPessoa                                                   // 03 - tipo de pessoa [1|2|3|4|5]
+                . $tipoCGC                                                      // 04 - tipo de CPF/CNPJ
+                . str_pad($cnpj, 14, '0', STR_PAD_LEFT)// 05 - CPF/CNPJ
                 . $createDt                                                     // 06 - data de nascimento/abertura
                 . $nome                                                         // 07 - razao social
                 . $nomeCurto                                                    // 08 - nome fantasia
@@ -70,7 +85,7 @@ try {
                 . $agencia                                                      // 11 - agencia
                 . $agenciaDv                                                    // 12 - dv-agencia
                 . '019'                                                         // 13 e 14 - grupo-setex
-                . str_pad('', 8)                                    // 15
+                . str_pad('', 8)                                   // 15
             ;
         }
     }
