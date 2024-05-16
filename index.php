@@ -32,7 +32,7 @@ $outputMCIF460 = [
     . 'MCIF460 '                               // 03 - nome do arquivo
     . '103401304'                              // 04 - MCI da empresa (passado pelo banco)
     . '00001'                                  // 05 - numero do processo
-    . '00005'                                  // 06 - sequencial de remessa
+    . '00007'                                  // 06 - sequencial de remessa
     . '03'                                     // 07 - versão do layout
     . '0008'                                   // 08 - agência da Secult
     . '6'                                      // 09 - dv-agência da Secult
@@ -45,22 +45,27 @@ $outputMCIF460[0] = str_pad($outputMCIF460[0], 150);
 
 //echo $outputMCIF460[0] . PHP_EOL;
 
-if(strtolower($argv[1]) === 'pj') {
-    $tipoPessoa = '3';
-    $tipoCGC = '3';
-} else {
-    $tipoPessoa = '1';
-    $tipoCGC = '1';
-}
-
-$filename = $argv[2];
+$filename = $argv[1];
 
 try {
-    $handle = fopen('pessoas.csv', 'r');
+    $handle = fopen($filename,'r');//'pessoas.csv', 'r');
 
-    for($i = -1; ($data = fgetcsv($handle, separator: ';')) !== false; $i++) {
+    for($i = -1; ($data = fgetcsv($handle, separator: ",")) !== false; $i++) {
         if($i > 0) {
-            $cnpj = preg_replace('/(\/|-|.)/', '', $data[1]);
+            $isPf = substr_compare('pessoa fisica', strtolower(cleanString($data[0])), 0, case_insensitive: true);
+
+            $isPf = str_contains(strtolower(cleanString($data[0])), 'pessoa fisica');
+
+            if($isPf > 0) {
+                $tipoPessoa = '1';
+                $tipoCGC = '1';
+            } else {
+                $tipoPessoa = '3';
+                $tipoCGC = '3';
+            }
+
+//            $cnpj = preg_replace('/(\/|-|.)/', '', $data[1]);
+            $cnpj = preg_replace('/[^0-9]/', '', $data[1]);
             $createDt = preg_replace('/([\/|-])/', '', $data[9]);
             $nome = str_pad(substr(cleanString($data[2]), 0, 60), 60);
             $nomeCurto = str_pad(substr(cleanString($data[3]), 0, 25), 25);
