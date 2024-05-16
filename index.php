@@ -47,14 +47,20 @@ $outputMCIF460[0] = str_pad($outputMCIF460[0], 150);
 
 $filename = $argv[1];
 
+if(!$filename) {
+    die('Arquivo não informado');
+}
+if(!file_exists($filename)) {
+    die('Arquivo não existe');
+}
+
 try {
     $handle = fopen($filename,'r');//'pessoas.csv', 'r');
 
     for($i = -1; ($data = fgetcsv($handle, separator: ",")) !== false; $i++) {
         if($i > 0) {
-            $isPf = substr_compare('pessoa fisica', strtolower(cleanString($data[0])), 0, case_insensitive: true);
 
-            $isPf = str_contains(strtolower(cleanString($data[0])), 'pessoa fisica');
+            $isPf = str_contains(mb_strtolower(cleanString($data[0])), 'pessoa fisica');
 
             if($isPf > 0) {
                 $tipoPessoa = '1';
