@@ -45,13 +45,13 @@ $outputMCIF460[0] = str_pad($outputMCIF460[0], 150);
 
 //echo $outputMCIF460[0] . PHP_EOL;
 
-$filename = $argv[1];
-
-if(!$filename) {
-    die('Arquivo não informado');
+if(!isset($argv[1])) {
+    die('Arquivo não informado' . PHP_EOL);
 }
+
+$filename = $argv[1];
 if(!file_exists($filename)) {
-    die('Arquivo não existe');
+    die('Arquivo não existe' . PHP_EOL);
 }
 
 try {
