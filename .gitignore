@@ -1,4 +1,5 @@
 .idea
+*.csv
 *.tsv
 *.dsv
 *.txt
