@@ -35,7 +35,7 @@ if(!file_exists($filename)) {
     die('Arquivo não existe' . PHP_EOL);
 }
 
-$seqRemessa = '00007';
+$seqRemessa = '00010';
 
 $outputMCIF460 = [
     '0000000'                                  // 01
@@ -74,7 +74,7 @@ try {
                 $posAgencia = 10;
                 $posAgenciaDv = 11;
                 $posNomeCurto = 3;
-                $posCreateDt = 9;
+                $posCreateDt = 4;
             }
 
 //            $cnpj = preg_replace('/(\/|-|.)/', '', $data[1]);
