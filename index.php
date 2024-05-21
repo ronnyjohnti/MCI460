@@ -35,14 +35,14 @@ if(!file_exists($filename)) {
     die('Arquivo não existe' . PHP_EOL);
 }
 
-$seqRemessa = '00010';
+$seqRemessa = '00007';
 
 $outputMCIF460 = [
     '0000000'                                  // 01
     . (new DateTime())->format('dmY')   // 02 - ddmmaaaa
     . 'MCIF460 '                               // 03 - nome do arquivo
     . '103401304'                              // 04 - MCI da empresa (passado pelo banco)
-    . '00001'                                  // 05 - numero do processo
+    . '94477'                                  // 05 - numero do processo
     . $seqRemessa                              // 06 - sequencial de remessa
     . '04'                                     // 07 - versão do layout
     . '0008'                                   // 08 - agência da Secult
@@ -86,22 +86,22 @@ try {
             $agenciaDv = strtoupper($data[$posAgenciaDv]);
 
             $outputMCIF460[$i] =
-                str_pad($i, 5, '0', STR_PAD_LEFT)           // 01 - sequencial do cliente
+                str_pad($i, 5, '0', STR_PAD_LEFT)              // 01 - sequencial do cliente
                 . '01'                                                                 // 02 - tipo do detalhe [01]
                 . $tipoPessoa                                                          // 03 - tipo de pessoa [1|2|3|4|5...N|O|P]
                 . $tipoCGC                                                             // 04 - tipo de CPF/CNPJ
-                . str_pad($cnpj, 14, '0', STR_PAD_LEFT)     // 05 - CPF/CNPJ
+                . str_pad($cnpj, 14, '0', STR_PAD_LEFT)        // 05 - CPF/CNPJ
                 . $createDt                                                            // 06 - data de nascimento/abertura
                 . $nome                                                                // 07 - razao social
                 . $nomeCurto                                                           // 08 - nome fantasia
                 . ' '                                                                  // 09 - espaço em branco
-                . str_pad('', 8)                                        // 10 - Uso cliente
-                . str_pad('', 9)                                        // 11 - Núm. Prog. Gestão Ágil
+                . str_pad('', 8)                                          // 10 - Uso cliente
+                . '000000218'                                                          // 11 - Núm. Prog. Gestão Ágil
                 . $agencia                                                             // 12 - agencia
                 . $agenciaDv                                                           // 13 - dv-agencia
                 . '019'                                                                // 14 e 15 - grupo-setex
-                . '   '//'000'                                                                // 16 - Natureza jurídica (Contante '000')
-                . '  '//'00' // ou '02'                                                      // 17 - Código Repasse
+                . '000'                                                                // 16 - Natureza jurídica (Contante '000')
+                . '01'                                                                 // 17 - Código Repasse [01|02]
                 . '   '                                                                // Código do Programa
             ;
         }
@@ -111,9 +111,9 @@ try {
 }
 
 $outputMCIF460[] = '9999999'                                                            // 01 (Contante '9999999')
-    . str_pad($i - 1, 5, '0', STR_PAD_LEFT)           // 02 Total de clientes
-    . str_pad($i + 1, 9, '0', STR_PAD_LEFT)           // 03 Quantidade de registros (Header e Trailer inclusos)
-    . str_pad('', 129);                                                  // 04 Espaço em branco
+    . str_pad($i - 1, 5, '0', STR_PAD_LEFT)               // 02 Total de clientes
+    . str_pad($i + 1, 9, '0', STR_PAD_LEFT)               // 03 Quantidade de registros (Header e Trailer inclusos)
+    . str_pad('', 129);                                                     // 04 Espaço em branco
 
 file_put_contents($seqRemessa . '_' . $filename . '.txt', implode(PHP_EOL, $outputMCIF460));
 
