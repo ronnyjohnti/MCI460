@@ -35,7 +35,7 @@ if(!file_exists($filename)) {
     die('Arquivo não existe' . PHP_EOL);
 }
 
-$seqRemessa = '00010';
+$seqRemessa = '00011';
 
 $outputMCIF460 = [
     '0000000'                                  // 01
@@ -44,7 +44,7 @@ $outputMCIF460 = [
     . '103401304'                              // 04 - MCI da empresa (passado pelo banco)
     . '94477'                                  // 05 - numero do processo
     . $seqRemessa                              // 06 - sequencial de remessa
-    . '04'                                     // 07 - versão do layout
+    . '03'                                     // 07 - versão do layout
     . '0008'                                   // 08 - agência da Secult
     . '6'                                      // 09 - dv-agência da Secult
     . '00000028890'                            // 10 - conta da Secult
@@ -96,12 +96,12 @@ try {
                 . $nomeCurto                                                           // 08 - nome fantasia
                 . ' '                                                                  // 09 - espaço em branco
                 . str_pad('', 8)                                          // 10 - Uso cliente
-                . '000000218'                                                          // 11 - Núm. Prog. Gestão Ágil
+                . '         '                                                          // 11 - Núm. Prog. Gestão Ágil
                 . $agencia                                                             // 12 - agencia
                 . $agenciaDv                                                           // 13 - dv-agencia
                 . '019'                                                                // 14 e 15 - grupo-setex
-                . '000'                                                                // 16 - Natureza jurídica (Contante '000')
-                . '01'                                                                 // 17 - Código Repasse [01|02]
+                . '   '                                                                // 16 - Natureza jurídica (Contante '000')
+                . '  '                                                                 // 17 - Código Repasse [01|02]
                 . '   '                                                                // Código do Programa
             ;
         }

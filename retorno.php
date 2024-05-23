@@ -13,12 +13,16 @@ abstract class Masks {
     }
 }
 
-$tipopessoa = $argv[1] ?: 'pf';
+$filename = ($argv[1] ?? 'MCI470.ret');
+$filename == ''
+
+$tipopessoa = $argv[2] ?? 'pf';
+echo $tipopessoa;
 $mask = $tipopessoa === 'pj' ? Masks::CNPJ : Masks::CPF;
 
 try {
-    $handle = fopen('MCI470.ret', 'r');
-    $handleOutput = fopen('MCI470.csv', 'w+');
+    $handle = fopen($filename, 'r');
+    $handleOutput = fopen($filename.'.csv', 'w+');
 
     $line = ['Sequencial', 'CNPJ', 'Data', 'Nome Cliente', 'Agencia', 'Digito Ag.', 'Setex', 'Digito Setex', 'Conta', 'Dig. Conta', 'Ocorrencia Cliente', 'Ocorrencia Conta', 'Ocorrencia Lim. Crédito', 'Cod. Cliente'];
     fputcsv($handleOutput, $line, separator: ';');
