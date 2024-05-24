@@ -14,7 +14,6 @@ abstract class Masks {
 }
 
 $filename = ($argv[1] ?? 'MCI470.ret');
-$filename == ''
 
 $tipopessoa = $argv[2] ?? 'pf';
 echo $tipopessoa;
