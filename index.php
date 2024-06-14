@@ -35,7 +35,7 @@ if(!file_exists($filename)) {
     die('Arquivo não existe' . PHP_EOL);
 }
 
-$seqRemessa = '00012';
+$seqRemessa = '00013';
 
 $outputMCIF460 = [
     '0000000'                                  // 01
