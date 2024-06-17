@@ -1,4 +1,25 @@
-<?php
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gerar MCIF 460</title>
+</head>
+<body>
+<form method="post" action="#" enctype="multipart/form-data">
+    <input type="file" name="csv_data">
+    <button>Gerar</button>
+</form>
+</body>
+</html><?php
+
+if(!$_FILES['csv_data'] && !isset($argv[1]) && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    exit;
+} else {
+    $filename = $_FILES['csv_data']['tmp_name'] ?? $argv[1];
+}
 
 function cleanString(string $text): string
 {
@@ -26,11 +47,10 @@ function cleanString(string $text): string
     return preg_replace(array_keys($utf8), array_values($utf8), $text);
 }
 
-if(!isset($argv[1])) {
+if(!$filename) {
     die('Arquivo não informado' . PHP_EOL);
 }
 
-$filename = $argv[1];
 if(!file_exists($filename)) {
     die('Arquivo não existe' . PHP_EOL);
 }
@@ -115,8 +135,11 @@ $outputMCIF460[] = '9999999'                                                    
     . str_pad($i + 1, 9, '0', STR_PAD_LEFT)               // 03 Quantidade de registros (Header e Trailer inclusos)
     . str_pad('', 129);                                                     // 04 Espaço em branco
 
-file_put_contents($seqRemessa . '_' . $filename . '.txt', implode(PHP_EOL, $outputMCIF460));
+$filenameOutput = $seqRemessa . '_' . ($argv[1] ?? $_FILES['csv_data']['name']) . '.txt';
+file_put_contents($filenameOutput, implode(PHP_EOL, $outputMCIF460));
 
 foreach ($outputMCIF460 as $line) {
     echo $line . PHP_EOL;
 }
+
+?><a href="<?= $filenameOutput ?>">Baixar MCIF460</a>
