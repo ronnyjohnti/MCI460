@@ -138,6 +138,7 @@ $outputMCIF460[] = '9999999'                                                    
 $filenameOutput = $seqRemessa . '_' . ($argv[1] ?? $_FILES['csv_data']['name']) . '.txt';
 file_put_contents($filenameOutput, implode(PHP_EOL, $outputMCIF460));
 
+if($_SERVER['REQUEST_METHOD'] !== 'POST')
 foreach ($outputMCIF460 as $line) {
     echo $line . PHP_EOL;
 }
